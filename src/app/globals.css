@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warm palette - grey/brown base tones */
+  --color-warm-50: #FAF8F5;
+  --color-warm-100: #F5F3F0;
+  --color-warm-200: #E8E4DF;
+  --color-warm-300: #D4CEC7;
+  --color-warm-400: #B5ADA4;
+  --color-warm-500: #8C8279;
+  --color-warm-600: #6B6158;
+  --color-warm-700: #524840;
+  --color-warm-800: #3D3632;
+
+  /* Garden green accents - earthy, desaturated */
+  --color-green-500: #7A9E7E;
+  --color-green-600: #6B8F71;
+  --color-green-700: #5A7A5F;
+
+  /* Functional */
+  --color-error: #B85C5C;
+
+  /* System font stack */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-warm-100 text-warm-700 font-sans antialiased;
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Prevent iOS zoom on input focus (font-size must be >= 16px) */
+  input, textarea, select {
+    font-size: inherit;
+  }
+}

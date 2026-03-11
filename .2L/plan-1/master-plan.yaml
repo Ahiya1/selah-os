@@ -1,0 +1,128 @@
+plan_id: plan-1
+created_at: "2026-03-12T00:00:00+02:00"
+status: PLANNED
+mode: production
+total_iterations: 2
+
+complexity_assessment: SIMPLE
+explorer_consensus:
+  architecture: "Monolithic Next.js App Router + Supabase BaaS"
+  risk_level: LOW
+  key_integration_point: "Supabase SSR auth with @supabase/ssr middleware"
+
+strategy: |
+  Two-iteration build delivering a complete, production-grade SelahOS.
+
+  Iteration 1 delivers the daily-use minimum: foundation (auth, schema, design system)
+  plus the Today screen, which is where 95% of interactions happen. If only iteration 1
+  ships, the user has a functional daily ground-state tracker.
+
+  Iteration 2 adds the remaining screens (Project, Signals), CI/CD pipeline,
+  production deployment, and comprehensive tests.
+
+  The three screens are fully independent siblings sharing only the auth context
+  and design system. No data relationships between tables.
+
+  Key design decisions locked by exploration:
+  - Day boundary: 4:00 AM (app shows "yesterday" before 4 AM)
+  - Auto-save everything (no submit buttons on Today screen)
+  - Optimistic UI + 500ms debounced upserts
+  - 56px+ tap targets for half-asleep usability
+  - System font stack (no web fonts)
+  - Warm palette: off-white background, warm brown text, garden green accents
+  - Next.js 15.x (LTS, not 16.x)
+  - @supabase/ssr pinned to exact version
+  - 5 production deps, 9 dev deps (minimal footprint)
+  - Native HTML elements (checkbox, button, textarea) — no UI library
+
+iterations:
+  - iteration_id: 1
+    global_iteration: 1
+    name: "Foundation + Today Screen"
+    vision: |
+      Establish the complete backend foundation and deliver the primary daily-use screen.
+      After this iteration, the user can log in, see today's ground state, mark daily
+      anchors, record sleep timestamps, write a daily note, and have all data persist.
+    scope: |
+      1. Next.js project scaffolding (App Router, TypeScript, Tailwind CSS)
+      2. Supabase project setup (create cloud project, configure auth)
+      3. Database schema migration (all 3 tables + RLS policies)
+      4. Supabase client configuration (browser, server, middleware — 3 client variants)
+      5. Magic link authentication flow (login page, auth callback, session persistence)
+      6. Auth middleware (route protection, session refresh)
+      7. Design system (warm palette CSS variables, shared components, global styles)
+      8. Navigation shell (fixed bottom bar with text labels: Today, Project, Signals)
+      9. Root layout (auth provider, nav shell, global styles)
+      10. Today screen — full implementation:
+          - Date header with day boundary logic (4 AM cutoff)
+          - Sleep section (going to sleep / woke up timestamp buttons)
+          - Food section (breakfast, lunch, dinner checkboxes)
+          - Medication section (cipralex checkbox)
+          - Body section (hygiene, movement checkboxes)
+          - Ground section (maintenance, build checkboxes + project name display)
+          - Note field (auto-save on blur/debounce)
+          - Optimistic UI updates + debounced upserts
+          - Auto-create record on first interaction
+      11. Shared utility: day boundary / effective date logic
+      12. Shared utility: debounced upsert hook
+      13. Vitest setup with initial tests (date utilities, component smoke tests)
+      14. Environment configuration (.env.local for Supabase credentials)
+    success_criteria:
+      - User can log in via magic link
+      - Today screen shows all daily anchors in one viewport
+      - Checkboxes toggle and persist across page reloads
+      - Sleep timestamps record and persist
+      - Daily note auto-saves
+      - Day boundary works correctly (shows yesterday before 4 AM)
+      - Auth session persists (no re-login needed daily)
+      - RLS prevents unauthorized access
+      - TypeScript compiles with strict mode
+      - All tests pass
+    status: PENDING
+    dependencies: []
+    estimated_hours: "6-8"
+    builders_expected: 3
+
+  - iteration_id: 2
+    global_iteration: 2
+    name: "Secondary Screens + Production Hardening"
+    vision: |
+      Complete the remaining screens and harden for production deployment.
+      After this iteration, all three screens are functional, CI/CD is in place,
+      the app is deployed to Vercel, and test coverage meets production standards.
+    scope: |
+      1. Ground Project screen:
+         - Display active project (name, status, start date)
+         - Edit project name and toggle status (active/paused)
+         - Create new project (deactivates previous)
+         - Only one active project at a time
+      2. Weekly Signals screen:
+         - Week indicator (Monday-based week start)
+         - Form: financial note, sleep state, weekly note
+         - Save/auto-save signal entry
+         - Display recent signals (last 4-6 weeks, reverse chronological)
+         - Upsert on (user_id, week_start) for idempotent updates
+      3. Today screen enhancement:
+         - Display current ground project name in ground section
+      4. Component tests for all screens (Vitest + Testing Library)
+      5. Integration tests (Supabase client mocking)
+      6. GitHub Actions CI pipeline (lint, type-check, test, build, npm audit)
+      7. Production deployment to Vercel
+      8. Vercel environment variables configuration
+      9. Mobile responsive polish and viewport optimization
+      10. Accessibility audit (contrast, keyboard nav, screen reader labels)
+    success_criteria:
+      - All three screens functional end-to-end
+      - Ground project name appears on Today screen
+      - Weekly signals create, update, and display correctly
+      - CI pipeline passes all gates (lint, types, tests, build)
+      - Test coverage >= 70%
+      - App deployed and accessible on Vercel URL
+      - Mobile-responsive on 375px+ screens
+      - No console errors in production build
+      - Security checklist clear (RLS verified, no exposed secrets)
+    status: PENDING
+    dependencies:
+      - 1
+    estimated_hours: "4-6"
+    builders_expected: 3
