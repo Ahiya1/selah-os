@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useDailyRecord } from '@/hooks/use-daily-record'
+import { useActiveProjectName } from '@/hooks/use-active-project-name'
 import { DateHeader } from '@/components/date-header'
 import { AnchorCheckbox } from '@/components/anchor-checkbox'
 import { SleepButton } from '@/components/sleep-button'
@@ -35,6 +36,7 @@ function TodayContent({ userId }: { userId: string }) {
     setSleepStart,
     setSleepEnd,
   } = useDailyRecord(userId)
+  const { projectName } = useActiveProjectName(userId)
 
   return (
     <div className="max-w-lg mx-auto px-4 pt-5 pb-24 space-y-6">
@@ -111,6 +113,9 @@ function TodayContent({ userId }: { userId: string }) {
       </SectionGroup>
 
       <SectionGroup label="ground">
+        {projectName && (
+          <p className="text-sm text-warm-600">{projectName}</p>
+        )}
         <div className="flex justify-around">
           <AnchorCheckbox
             id="maintenance"

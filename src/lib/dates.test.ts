@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { getEffectiveDate, formatDisplayDate, formatTime, formatDateString, getWeekStart } from './dates'
+import { getEffectiveDate, formatDisplayDate, formatTime, formatDateString, getWeekStart, formatWeekRange } from './dates'
 
 describe('getEffectiveDate', () => {
   afterEach(() => {
@@ -123,5 +123,23 @@ describe('getWeekStart', () => {
     // March 15, 2026 is a Sunday
     const date = new Date('2026-03-15T10:00:00')
     expect(getWeekStart(date)).toBe('2026-03-09')
+  })
+})
+
+describe('formatWeekRange', () => {
+  it('formats a week within a single month', () => {
+    expect(formatWeekRange('2026-03-09')).toBe('Mar 9 \u2013 15')
+  })
+
+  it('formats a week spanning two months', () => {
+    expect(formatWeekRange('2026-03-30')).toBe('Mar 30 \u2013 Apr 5')
+  })
+
+  it('formats a week spanning December to January', () => {
+    expect(formatWeekRange('2026-12-28')).toBe('Dec 28 \u2013 Jan 3')
+  })
+
+  it('formats first week of a month', () => {
+    expect(formatWeekRange('2026-04-06')).toBe('Apr 6 \u2013 12')
   })
 })

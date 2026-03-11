@@ -10,7 +10,7 @@ plans:
     mode: production
     vision_file: plan-1/vision.md
     current_phase: exploration
-    current_iteration: 1
+    current_iteration: 2
     master_exploration:
       num_explorers: 3
       complexity_level: SIMPLE

@@ -27,7 +27,7 @@ export function Nav() {
               href={href}
               className={`
                 flex-1 flex items-center justify-center text-base
-                ${isActive ? 'text-green-600' : 'text-warm-500'}
+                ${isActive ? 'text-green-600' : 'text-warm-600'}
               `}
             >
               {label}

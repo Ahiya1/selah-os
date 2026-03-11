@@ -42,7 +42,7 @@ describe('Nav', () => {
     const projectLink = screen.getByText('Project').closest('a')
     // Today is active (pathname is '/'), should have green-600 class
     expect(todayLink?.className).toContain('text-green-600')
-    // Project is inactive, should have warm-500 class
-    expect(projectLink?.className).toContain('text-warm-500')
+    // Project is inactive, should have warm-600 class
+    expect(projectLink?.className).toContain('text-warm-600')
   })
 })

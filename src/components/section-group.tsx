@@ -8,7 +8,7 @@ interface SectionGroupProps {
 export function SectionGroup({ label, children }: SectionGroupProps) {
   return (
     <section className="space-y-2">
-      <h2 className="text-sm text-warm-500 uppercase tracking-wide">{label}</h2>
+      <h2 className="text-sm text-warm-600 uppercase tracking-wide">{label}</h2>
       {children}
     </section>
   )

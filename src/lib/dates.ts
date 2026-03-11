@@ -67,3 +67,29 @@ export function getWeekStart(now?: Date): string {
   monday.setDate(current.getDate() + diff)
   return formatDateString(monday)
 }
+
+/**
+ * Formats a week start date (YYYY-MM-DD Monday) as a display range.
+ * Example: "2026-03-09" -> "Mar 9 \u2013 15"
+ * Handles month boundaries: "2026-03-30" -> "Mar 30 \u2013 Apr 5"
+ */
+const MONTH_ABBREVS = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+]
+
+export function formatWeekRange(weekStart: string): string {
+  const [year, month, day] = weekStart.split('-').map(Number)
+  const monday = new Date(year, month - 1, day)
+  const sunday = new Date(monday)
+  sunday.setDate(monday.getDate() + 6)
+
+  const startMonth = MONTH_ABBREVS[monday.getMonth()]
+  const endMonth = MONTH_ABBREVS[sunday.getMonth()]
+
+  if (startMonth === endMonth) {
+    return `${startMonth} ${monday.getDate()} \u2013 ${sunday.getDate()}`
+  }
+
+  return `${startMonth} ${monday.getDate()} \u2013 ${endMonth} ${sunday.getDate()}`
+}
