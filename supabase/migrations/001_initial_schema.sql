@@ -1,15 +1,14 @@
 -- SelahOS Initial Schema
 -- All 3 tables + RLS policies + indexes + triggers
 
--- Enable UUID extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Use gen_random_uuid() (native PostgreSQL 13+, no extension needed)
 
 -- =============================================================================
 -- Table: daily_records
 -- =============================================================================
 
 CREATE TABLE daily_records (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   date DATE NOT NULL,
   sleep_start TIMESTAMPTZ,
@@ -55,7 +54,7 @@ CREATE POLICY "Users can update own daily records"
 -- =============================================================================
 
 CREATE TABLE ground_projects (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'active'
@@ -93,7 +92,7 @@ CREATE POLICY "Users can update own ground projects"
 -- =============================================================================
 
 CREATE TABLE weekly_signals (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   week_start DATE NOT NULL,
   financial_note TEXT NOT NULL DEFAULT '',
