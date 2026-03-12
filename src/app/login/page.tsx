@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
@@ -8,6 +9,27 @@ export default function LoginPage() {
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const supabase = createClient()
+  const router = useRouter()
+
+  // Handle implicit flow tokens in hash fragment (e.g. from admin-generated links)
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1))
+      const accessToken = params.get('access_token')
+      const refreshToken = params.get('refresh_token')
+      if (accessToken && refreshToken) {
+        supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+          .then(({ error }) => {
+            if (!error) {
+              router.push('/')
+            } else {
+              setError(error.message)
+            }
+          })
+      }
+    }
+  }, [supabase.auth, router])
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
