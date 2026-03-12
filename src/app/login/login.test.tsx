@@ -2,13 +2,20 @@ import React from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
+// Mock next/navigation
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
+}))
+
 // Mock the Supabase client
 const mockSignInWithOtp = vi.fn()
+const mockSetSession = vi.fn().mockResolvedValue({ error: null })
 
 vi.mock('@/lib/supabase/client', () => ({
   createClient: () => ({
     auth: {
       signInWithOtp: mockSignInWithOtp,
+      setSession: mockSetSession,
     },
   }),
 }))

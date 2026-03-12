@@ -17,11 +17,12 @@ vi.mock('next/link', () => ({
 import { Nav } from './nav'
 
 describe('Nav', () => {
-  it('renders three navigation links', () => {
+  it('renders four navigation links', () => {
     render(<Nav />)
     expect(screen.getByText('Today')).toBeInTheDocument()
     expect(screen.getByText('Project')).toBeInTheDocument()
     expect(screen.getByText('Signals')).toBeInTheDocument()
+    expect(screen.getByText('Ground')).toBeInTheDocument()
   })
 
   it('has correct href attributes', () => {
@@ -29,6 +30,7 @@ describe('Nav', () => {
     expect(screen.getByText('Today').closest('a')).toHaveAttribute('href', '/')
     expect(screen.getByText('Project').closest('a')).toHaveAttribute('href', '/project')
     expect(screen.getByText('Signals').closest('a')).toHaveAttribute('href', '/signals')
+    expect(screen.getByText('Ground').closest('a')).toHaveAttribute('href', '/ground')
   })
 
   it('has main navigation aria-label', () => {

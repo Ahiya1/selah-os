@@ -1,0 +1,25 @@
+plan_id: plan-2
+created_at: 2026-03-12T02:55:00+03:00
+status: PLANNED
+mode: production
+total_iterations: 1
+
+strategy: |
+  Single iteration adding a Ground Integrity view to the existing SelahOS app.
+  Read-only 7-day anchor grid. No new tables, no new dependencies.
+  Follow all existing patterns exactly.
+
+iterations:
+  - iteration_id: 1
+    global_iteration: 3
+    name: "Ground Integrity View"
+    vision: "Add a quiet 7-day anchor grid showing ground state patterns"
+    scope: |
+      - New hook: use-ground-integrity.ts (read-only, fetches last 7 days of daily_records)
+      - New page: src/app/ground/page.tsx (auth wrapper + grid component)
+      - New component: integrity-grid.tsx (7 days x 5 anchor categories, filled/empty dots)
+      - Update nav.tsx: add "Ground" tab
+      - Tests for hook, page, and grid component
+      - Follow existing patterns exactly
+    status: PENDING
+    dependencies: []

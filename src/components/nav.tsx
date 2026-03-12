@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { href: '/', label: 'Today' },
   { href: '/project', label: 'Project' },
   { href: '/signals', label: 'Signals' },
+  { href: '/ground', label: 'Ground' },
 ]
 
 export function Nav() {
