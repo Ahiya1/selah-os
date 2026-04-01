@@ -20,28 +20,20 @@ vi.mock('@/hooks/use-daily-record', () => ({
       date: '2026-03-12',
       sleep_start: null,
       sleep_end: null,
-      breakfast: false,
-      lunch: false,
-      dinner: false,
-      cipralex_taken: false,
-      hygiene_done: false,
-      movement_done: false,
-      ground_maintenance_done: false,
-      ground_build_done: false,
+      breakfast: null,
+      lunch: null,
+      dinner: null,
+      cipralex_taken: null,
+      hygiene_done: null,
+      movement_done: null,
+      ground_maintenance_done: null,
+      ground_build_done: null,
       note: '',
     },
     error: null,
     updateField: vi.fn(),
     setSleepStart: vi.fn(),
     setSleepEnd: vi.fn(),
-  }),
-}))
-
-// Mock useActiveProjectName
-vi.mock('@/hooks/use-active-project-name', () => ({
-  useActiveProjectName: () => ({
-    projectName: 'Build SelahOS',
-    isLoading: false,
   }),
 }))
 
@@ -80,11 +72,4 @@ describe('TodayPage', () => {
     })
   })
 
-  it('shows active project name in ground section', async () => {
-    render(<TodayPage />)
-
-    await waitFor(() => {
-      expect(screen.getByText('Build SelahOS')).toBeInTheDocument()
-    })
-  })
 })

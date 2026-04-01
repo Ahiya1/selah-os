@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useDailyRecord } from '@/hooks/use-daily-record'
-import { useActiveProjectName } from '@/hooks/use-active-project-name'
 import { DateHeader } from '@/components/date-header'
 import { AnchorCheckbox } from '@/components/anchor-checkbox'
 import { SleepButton } from '@/components/sleep-button'
@@ -36,10 +35,8 @@ function TodayContent({ userId }: { userId: string }) {
     setSleepStart,
     setSleepEnd,
   } = useDailyRecord(userId)
-  const { projectName } = useActiveProjectName(userId)
-
   return (
-    <div className="max-w-lg mx-auto px-4 pt-5 pb-24 space-y-6">
+    <div className="max-w-lg mx-auto px-4 pt-5 pb-8 space-y-6">
       <DateHeader />
 
       {error && (
@@ -66,19 +63,19 @@ function TodayContent({ userId }: { userId: string }) {
           <AnchorCheckbox
             id="breakfast"
             label="breakfast"
-            checked={record.breakfast ?? false}
+            value={record.breakfast ?? null}
             onChange={(v) => updateField('breakfast', v)}
           />
           <AnchorCheckbox
             id="lunch"
             label="lunch"
-            checked={record.lunch ?? false}
+            value={record.lunch ?? null}
             onChange={(v) => updateField('lunch', v)}
           />
           <AnchorCheckbox
             id="dinner"
             label="dinner"
-            checked={record.dinner ?? false}
+            value={record.dinner ?? null}
             onChange={(v) => updateField('dinner', v)}
           />
         </div>
@@ -89,7 +86,7 @@ function TodayContent({ userId }: { userId: string }) {
           <AnchorCheckbox
             id="cipralex"
             label="cipralex"
-            checked={record.cipralex_taken ?? false}
+            value={record.cipralex_taken ?? null}
             onChange={(v) => updateField('cipralex_taken', v)}
           />
         </div>
@@ -100,33 +97,30 @@ function TodayContent({ userId }: { userId: string }) {
           <AnchorCheckbox
             id="hygiene"
             label="hygiene"
-            checked={record.hygiene_done ?? false}
+            value={record.hygiene_done ?? null}
             onChange={(v) => updateField('hygiene_done', v)}
           />
           <AnchorCheckbox
             id="movement"
             label="movement"
-            checked={record.movement_done ?? false}
+            value={record.movement_done ?? null}
             onChange={(v) => updateField('movement_done', v)}
           />
         </div>
       </SectionGroup>
 
       <SectionGroup label="ground">
-        {projectName && (
-          <p className="text-sm text-warm-600">{projectName}</p>
-        )}
         <div className="flex justify-around">
           <AnchorCheckbox
             id="maintenance"
             label="maintenance"
-            checked={record.ground_maintenance_done ?? false}
+            value={record.ground_maintenance_done ?? null}
             onChange={(v) => updateField('ground_maintenance_done', v)}
           />
           <AnchorCheckbox
             id="build"
             label="build"
-            checked={record.ground_build_done ?? false}
+            value={record.ground_build_done ?? null}
             onChange={(v) => updateField('ground_build_done', v)}
           />
         </div>

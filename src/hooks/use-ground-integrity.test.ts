@@ -68,9 +68,9 @@ describe('recordToIntegrity', () => {
     const record = {
       id: '1', user_id: 'u1', date: '2026-03-12',
       sleep_start: '2026-03-11T23:00:00Z', sleep_end: '2026-03-12T07:00:00Z',
-      breakfast: false, lunch: false, dinner: false,
-      cipralex_taken: false, hygiene_done: false, movement_done: false,
-      ground_maintenance_done: false, ground_build_done: false,
+      breakfast: null, lunch: null, dinner: null,
+      cipralex_taken: null, hygiene_done: null, movement_done: null,
+      ground_maintenance_done: null, ground_build_done: null,
       note: '', created_at: '', updated_at: '',
     }
     const result = recordToIntegrity('2026-03-12', record)
@@ -83,8 +83,8 @@ describe('recordToIntegrity', () => {
       id: '1', user_id: 'u1', date: '2026-03-12',
       sleep_start: null, sleep_end: null,
       breakfast: true, lunch: true, dinner: true,
-      cipralex_taken: false, hygiene_done: false, movement_done: false,
-      ground_maintenance_done: false, ground_build_done: false,
+      cipralex_taken: null, hygiene_done: null, movement_done: null,
+      ground_maintenance_done: null, ground_build_done: null,
       note: '', created_at: '', updated_at: '',
     }
     expect(recordToIntegrity('2026-03-12', record).food).toBe(true)
@@ -94,9 +94,9 @@ describe('recordToIntegrity', () => {
     const record = {
       id: '1', user_id: 'u1', date: '2026-03-12',
       sleep_start: null, sleep_end: null,
-      breakfast: true, lunch: false, dinner: true,
-      cipralex_taken: false, hygiene_done: false, movement_done: false,
-      ground_maintenance_done: false, ground_build_done: false,
+      breakfast: true, lunch: null, dinner: true,
+      cipralex_taken: null, hygiene_done: null, movement_done: null,
+      ground_maintenance_done: null, ground_build_done: null,
       note: '', created_at: '', updated_at: '',
     }
     expect(recordToIntegrity('2026-03-12', record).food).toBe(false)
@@ -106,9 +106,9 @@ describe('recordToIntegrity', () => {
     const record = {
       id: '1', user_id: 'u1', date: '2026-03-12',
       sleep_start: null, sleep_end: null,
-      breakfast: false, lunch: false, dinner: false,
-      cipralex_taken: false, hygiene_done: false, movement_done: false,
-      ground_maintenance_done: true, ground_build_done: false,
+      breakfast: null, lunch: null, dinner: null,
+      cipralex_taken: null, hygiene_done: null, movement_done: null,
+      ground_maintenance_done: true, ground_build_done: null,
       note: '', created_at: '', updated_at: '',
     }
     expect(recordToIntegrity('2026-03-12', record).ground).toBe(true)
@@ -118,9 +118,9 @@ describe('recordToIntegrity', () => {
     const record = {
       id: '1', user_id: 'u1', date: '2026-03-12',
       sleep_start: null, sleep_end: null,
-      breakfast: false, lunch: false, dinner: false,
-      cipralex_taken: false, hygiene_done: true, movement_done: true,
-      ground_maintenance_done: false, ground_build_done: false,
+      breakfast: null, lunch: null, dinner: null,
+      cipralex_taken: null, hygiene_done: true, movement_done: true,
+      ground_maintenance_done: null, ground_build_done: null,
       note: '', created_at: '', updated_at: '',
     }
     expect(recordToIntegrity('2026-03-12', record).body).toBe(true)

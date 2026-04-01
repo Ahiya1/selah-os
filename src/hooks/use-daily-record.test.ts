@@ -90,10 +90,10 @@ describe('useDailyRecord', () => {
     const { result } = renderHook(() => useDailyRecord('user-123'))
 
     expect(result.current.record.date).toBe('2026-03-12')
-    expect(result.current.record.breakfast).toBe(false)
-    expect(result.current.record.lunch).toBe(false)
-    expect(result.current.record.dinner).toBe(false)
-    expect(result.current.record.cipralex_taken).toBe(false)
+    expect(result.current.record.breakfast).toBeNull()
+    expect(result.current.record.lunch).toBeNull()
+    expect(result.current.record.dinner).toBeNull()
+    expect(result.current.record.cipralex_taken).toBeNull()
     expect(result.current.record.note).toBe('')
   })
 
@@ -110,13 +110,13 @@ describe('useDailyRecord', () => {
       sleep_start: null,
       sleep_end: null,
       breakfast: true,
-      lunch: false,
-      dinner: false,
+      lunch: null,
+      dinner: null,
       cipralex_taken: true,
-      hygiene_done: false,
-      movement_done: false,
-      ground_maintenance_done: false,
-      ground_build_done: false,
+      hygiene_done: null,
+      movement_done: null,
+      ground_maintenance_done: null,
+      ground_build_done: null,
       note: 'test note',
       created_at: '2026-03-12T00:00:00.000Z',
       updated_at: '2026-03-12T00:00:00.000Z',
@@ -206,14 +206,14 @@ describe('useDailyRecord', () => {
       date: '2026-03-12',
       sleep_start: '2026-03-12T22:00:00.000Z',
       sleep_end: null,
-      breakfast: false,
-      lunch: false,
-      dinner: false,
-      cipralex_taken: false,
-      hygiene_done: false,
-      movement_done: false,
-      ground_maintenance_done: false,
-      ground_build_done: false,
+      breakfast: null,
+      lunch: null,
+      dinner: null,
+      cipralex_taken: null,
+      hygiene_done: null,
+      movement_done: null,
+      ground_maintenance_done: null,
+      ground_build_done: null,
       note: '',
       created_at: '2026-03-12T00:00:00.000Z',
       updated_at: '2026-03-12T00:00:00.000Z',
@@ -261,14 +261,14 @@ describe('useDailyRecord', () => {
       date: '2026-03-12',
       sleep_start: null,
       sleep_end: '2026-03-12T06:30:00.000Z',
-      breakfast: false,
-      lunch: false,
-      dinner: false,
-      cipralex_taken: false,
-      hygiene_done: false,
-      movement_done: false,
-      ground_maintenance_done: false,
-      ground_build_done: false,
+      breakfast: null,
+      lunch: null,
+      dinner: null,
+      cipralex_taken: null,
+      hygiene_done: null,
+      movement_done: null,
+      ground_maintenance_done: null,
+      ground_build_done: null,
       note: '',
       created_at: '2026-03-12T00:00:00.000Z',
       updated_at: '2026-03-12T00:00:00.000Z',

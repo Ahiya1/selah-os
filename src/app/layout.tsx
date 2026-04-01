@@ -1,7 +1,6 @@
 import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import '@/app/globals.css'
-import { Nav } from '@/components/nav'
 
 export const metadata: Metadata = {
   title: 'SelahOS',
@@ -23,7 +22,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
-        <Nav />
       </body>
     </html>
   )

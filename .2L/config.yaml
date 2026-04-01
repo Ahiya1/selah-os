@@ -1,7 +1,7 @@
 project_name: selah-os
 created: 2026-03-12
-current_plan: plan-2
-global_iteration_counter: 2
+current_plan: plan-3
+global_iteration_counter: 3
 
 plans:
   plan-1:
@@ -26,7 +26,7 @@ plans:
         tag: 2l-plan-1-iter-2-prod
 
   plan-2:
-    status: VISIONED
+    status: SUPERSEDED
     created: 2026-03-12
     mode: production
     vision_file: plan-2/vision.md
@@ -36,3 +36,18 @@ plans:
     master_exploration:
       num_explorers: 2
       complexity_level: SIMPLE
+
+  plan-3:
+    status: IN_PROGRESS
+    created: 2026-04-01
+    mode: production
+    vision_file: plan-3/vision.md
+    current_phase: exploration
+    current_iteration: 3
+    github_repo: https://github.com/Ahiya1/selah-os
+    master_exploration:
+      num_explorers: 2
+      complexity_level: SIMPLE
+    iterations:
+      3:
+        status: IN_PROGRESS

@@ -1,0 +1,52 @@
+plan_id: plan-3
+created_at: 2026-04-01T00:00:00+03:00
+status: PLANNED
+mode: production
+total_iterations: 1
+
+strategy: |
+  Single iteration to simplify SelahOS down to the Ground Phase.
+  This is a subtraction project: more code removed than added.
+
+  Key changes:
+  1. Remove Project and Signals pages, hooks, and tests
+  2. Restrict Ground page to weekly-only access (remove from daily nav)
+  3. Convert anchor state from boolean to 3-state (done/not-done/untouched)
+  4. Update navigation to Today-only
+  5. Database migration: boolean NOT NULL → boolean NULL
+
+  Critical dependency: use-active-project-name is imported by Today page.
+  Must be removed atomically with page update.
+
+  Database migration must run before new code deploys.
+  Existing false values become NULL (untouched semantics).
+
+iterations:
+  - iteration_id: 1
+    global_iteration: 3
+    name: "Ground Phase Simplification"
+    vision: "Strip SelahOS to minimal Today-only interface with 3-state anchors"
+    scope: |
+      DELETE (10 files):
+      - src/app/project/page.tsx + project.test.tsx
+      - src/app/signals/page.tsx + signals.test.tsx
+      - src/hooks/use-ground-project.ts + test
+      - src/hooks/use-weekly-signals.ts + test
+      - src/hooks/use-active-project-name.ts + test
+
+      MODIFY (key files):
+      - src/lib/types.ts: anchor state boolean → boolean | null
+      - src/hooks/use-daily-record.ts: support 3-state toggle logic
+      - src/components/anchor-checkbox.tsx → anchor-toggle.tsx: 3-state UI (✓/—/○)
+      - src/components/nav.tsx: remove all tabs except Today, remove Ground from daily nav
+      - src/app/page.tsx: remove project name display, update anchor rendering
+      - src/app/ground/page.tsx: add weekly-only access restriction
+      - Database migration: ALTER columns, backfill false→NULL
+
+      TESTS:
+      - Update all modified component/hook tests for 3-state
+      - Remove tests for deleted files
+      - Add tests for weekly access restriction
+      - Coverage target: >= 70%
+    status: PENDING
+    dependencies: []

@@ -10,20 +10,20 @@ describe('Database types', () => {
       date: '2026-03-12',
       sleep_start: null,
       sleep_end: null,
-      breakfast: false,
-      lunch: false,
-      dinner: false,
-      cipralex_taken: false,
-      hygiene_done: false,
-      movement_done: false,
-      ground_maintenance_done: false,
-      ground_build_done: false,
+      breakfast: null,
+      lunch: null,
+      dinner: null,
+      cipralex_taken: null,
+      hygiene_done: null,
+      movement_done: null,
+      ground_maintenance_done: null,
+      ground_build_done: null,
       note: '',
       created_at: '2026-03-12T00:00:00.000Z',
       updated_at: '2026-03-12T00:00:00.000Z',
     }
     expect(mockRow.id).toBe('test-id')
-    expect(mockRow.breakfast).toBe(false)
+    expect(mockRow.breakfast).toBeNull()
     expect(mockRow.note).toBe('')
     expect(mockRow.sleep_start).toBeNull()
   })
@@ -46,32 +46,4 @@ describe('Database types', () => {
     expect(mockUpdate.user_id).toBeUndefined()
   })
 
-  it('ground_projects Row type has status field', () => {
-    const mockRow: Database['public']['Tables']['ground_projects']['Row'] = {
-      id: 'proj-id',
-      user_id: 'user-id',
-      name: 'Test Project',
-      status: 'active',
-      start_date: '2026-03-12',
-      created_at: '2026-03-12T00:00:00.000Z',
-      updated_at: '2026-03-12T00:00:00.000Z',
-    }
-    expect(mockRow.status).toBe('active')
-    expect(mockRow.name).toBe('Test Project')
-  })
-
-  it('weekly_signals Row type has all signal fields', () => {
-    const mockRow: Database['public']['Tables']['weekly_signals']['Row'] = {
-      id: 'signal-id',
-      user_id: 'user-id',
-      week_start: '2026-03-09',
-      financial_note: '',
-      sleep_state: '',
-      note: '',
-      created_at: '2026-03-12T00:00:00.000Z',
-      updated_at: '2026-03-12T00:00:00.000Z',
-    }
-    expect(mockRow.week_start).toBe('2026-03-09')
-    expect(mockRow.financial_note).toBe('')
-  })
 })
