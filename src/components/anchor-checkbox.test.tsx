@@ -147,6 +147,54 @@ describe('AnchorCheckbox', () => {
     expect(button).toHaveAttribute('type', 'button')
   })
 
+  it('reveals the timestamp briefly when marked done', () => {
+    const { container, rerender } = render(
+      <AnchorCheckbox id="test" label="breakfast" value={null} timestamp={null} onChange={() => {}} />
+    )
+    // Not shown at rest
+    expect(container.querySelector('.anchor-time')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('checkbox'))
+    // Parent reflects the new done state + stamped time (as useDailyRecord does)
+    rerender(
+      <AnchorCheckbox
+        id="test"
+        label="breakfast"
+        value={true}
+        timestamp="2026-05-27T08:10:00.000Z"
+        onChange={() => {}}
+      />
+    )
+    const time = container.querySelector('.anchor-time')
+    expect(time).toBeInTheDocument()
+    expect(time).toHaveTextContent(/\d{2}:\d{2}/)
+  })
+
+  it('plays the beat and tree-ring on completion only', () => {
+    const { container } = render(
+      <AnchorCheckbox id="test" label="breakfast" value={null} onChange={() => {}} />
+    )
+    expect(container.querySelector('.anchor-tree-ring')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('checkbox'))
+    expect(screen.getByRole('checkbox')).toHaveClass('anchor-beat')
+    expect(container.querySelector('.anchor-tree-ring')).toBeInTheDocument()
+  })
+
+  it('does not reveal time or ring when leaving the done state', () => {
+    const { container } = render(
+      <AnchorCheckbox
+        id="test"
+        label="breakfast"
+        value={true}
+        timestamp="2026-05-27T08:10:00.000Z"
+        onChange={() => {}}
+      />
+    )
+    // true -> false on click; no reveal, no ring
+    fireEvent.click(screen.getByRole('checkbox'))
+    expect(container.querySelector('.anchor-tree-ring')).not.toBeInTheDocument()
+    expect(container.querySelector('.anchor-time')).not.toBeInTheDocument()
+  })
+
   it('does not use red or error colors for not-done state', () => {
     const { container } = render(
       <AnchorCheckbox id="test" label="breakfast" value={false} onChange={() => {}} />

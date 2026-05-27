@@ -38,3 +38,55 @@
     font-size: inherit;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Anchor completion — a beat, and a ring grown within.
+   Not performative: small, quiet, alive. Like a tree a little more mature.
+   --------------------------------------------------------------------------- */
+
+/* A single soft beat — the circle swells slightly and settles. */
+@keyframes anchor-beat {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* A growth ring: drawn inward toward the center, then dissolved. */
+@keyframes anchor-tree-ring {
+  0%   { transform: scale(1.3);  opacity: 0; }
+  40%  { transform: scale(1.0);  opacity: 0.55; }
+  100% { transform: scale(0.9);  opacity: 0; }
+}
+
+/* The time of the moment — blooms in, rests, fades back to ground. */
+@keyframes anchor-time {
+  0%   { opacity: 0; transform: translateY(-2px); }
+  12%  { opacity: 1; transform: translateY(0); }
+  78%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+.anchor-beat {
+  animation: anchor-beat 1000ms cubic-bezier(0.34, 0.01, 0.27, 1) both;
+}
+
+.anchor-tree-ring {
+  animation: anchor-tree-ring 900ms ease-out both;
+}
+
+.anchor-time {
+  animation: anchor-time 3200ms ease both;
+}
+
+/* Honor stillness: those who ask for less motion still get the quiet reveal. */
+@media (prefers-reduced-motion: reduce) {
+  .anchor-beat {
+    animation: none;
+  }
+  .anchor-tree-ring {
+    display: none;
+  }
+  .anchor-time {
+    animation: anchor-time 3200ms steps(1, end) both;
+  }
+}

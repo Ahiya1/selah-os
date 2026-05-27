@@ -22,7 +22,38 @@ const EMPTY_RECORD: Omit<DailyRecord, 'id' | 'user_id' | 'created_at' | 'updated
   movement_done: null,
   ground_maintenance_done: null,
   ground_build_done: null,
+  breakfast_at: null,
+  lunch_at: null,
+  dinner_at: null,
+  cipralex_taken_at: null,
+  hygiene_done_at: null,
+  movement_done_at: null,
+  ground_maintenance_done_at: null,
+  ground_build_done_at: null,
   note: '',
+}
+
+// Each anchor's boolean column maps to a timestamp companion (<column>_at).
+// The timestamp records the moment the anchor was met.
+type AnchorField =
+  | 'breakfast'
+  | 'lunch'
+  | 'dinner'
+  | 'cipralex_taken'
+  | 'hygiene_done'
+  | 'movement_done'
+  | 'ground_maintenance_done'
+  | 'ground_build_done'
+
+const ANCHOR_TIME_FIELD: Record<AnchorField, keyof DailyRecord> = {
+  breakfast: 'breakfast_at',
+  lunch: 'lunch_at',
+  dinner: 'dinner_at',
+  cipralex_taken: 'cipralex_taken_at',
+  hygiene_done: 'hygiene_done_at',
+  movement_done: 'movement_done_at',
+  ground_maintenance_done: 'ground_maintenance_done_at',
+  ground_build_done: 'ground_build_done_at',
 }
 
 export function useDailyRecord(userId: string) {
@@ -106,6 +137,21 @@ export function useDailyRecord(userId: string) {
     [scheduleSave]
   )
 
+  // Set an anchor and stamp the moment it was met.
+  // When marked done (true), capture NOW(); otherwise clear the timestamp.
+  // The boolean and its timestamp are written together so they never drift.
+  const setAnchor = useCallback(
+    (field: AnchorField, value: boolean | null) => {
+      const timeField = ANCHOR_TIME_FIELD[field]
+      const timestamp = value === true ? new Date().toISOString() : null
+      setRecord((prev) => ({ ...prev, [field]: value, [timeField]: timestamp }))
+      pendingUpdates.current[field] = value as never
+      pendingUpdates.current[timeField] = timestamp as never
+      scheduleSave()
+    },
+    [scheduleSave]
+  )
+
   // Record sleep timestamp (flush immediately -- timestamp is time-sensitive)
   const setSleepStart = useCallback(() => {
     const current = record.sleep_start
@@ -156,6 +202,7 @@ export function useDailyRecord(userId: string) {
     error,
     effectiveDate,
     updateField,
+    setAnchor,
     setSleepStart,
     setSleepEnd,
   }

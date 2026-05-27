@@ -32,6 +32,7 @@ function TodayContent({ userId }: { userId: string }) {
     record,
     error,
     updateField,
+    setAnchor,
     setSleepStart,
     setSleepEnd,
   } = useDailyRecord(userId)
@@ -64,19 +65,22 @@ function TodayContent({ userId }: { userId: string }) {
             id="breakfast"
             label="breakfast"
             value={record.breakfast ?? null}
-            onChange={(v) => updateField('breakfast', v)}
+            timestamp={record.breakfast_at ?? null}
+            onChange={(v) => setAnchor('breakfast', v)}
           />
           <AnchorCheckbox
             id="lunch"
             label="lunch"
             value={record.lunch ?? null}
-            onChange={(v) => updateField('lunch', v)}
+            timestamp={record.lunch_at ?? null}
+            onChange={(v) => setAnchor('lunch', v)}
           />
           <AnchorCheckbox
             id="dinner"
             label="dinner"
             value={record.dinner ?? null}
-            onChange={(v) => updateField('dinner', v)}
+            timestamp={record.dinner_at ?? null}
+            onChange={(v) => setAnchor('dinner', v)}
           />
         </div>
       </SectionGroup>
@@ -87,7 +91,8 @@ function TodayContent({ userId }: { userId: string }) {
             id="cipralex"
             label="cipralex"
             value={record.cipralex_taken ?? null}
-            onChange={(v) => updateField('cipralex_taken', v)}
+            timestamp={record.cipralex_taken_at ?? null}
+            onChange={(v) => setAnchor('cipralex_taken', v)}
           />
         </div>
       </SectionGroup>
@@ -98,13 +103,15 @@ function TodayContent({ userId }: { userId: string }) {
             id="hygiene"
             label="hygiene"
             value={record.hygiene_done ?? null}
-            onChange={(v) => updateField('hygiene_done', v)}
+            timestamp={record.hygiene_done_at ?? null}
+            onChange={(v) => setAnchor('hygiene_done', v)}
           />
           <AnchorCheckbox
             id="movement"
             label="movement"
             value={record.movement_done ?? null}
-            onChange={(v) => updateField('movement_done', v)}
+            timestamp={record.movement_done_at ?? null}
+            onChange={(v) => setAnchor('movement_done', v)}
           />
         </div>
       </SectionGroup>
@@ -115,13 +122,15 @@ function TodayContent({ userId }: { userId: string }) {
             id="maintenance"
             label="maintenance"
             value={record.ground_maintenance_done ?? null}
-            onChange={(v) => updateField('ground_maintenance_done', v)}
+            timestamp={record.ground_maintenance_done_at ?? null}
+            onChange={(v) => setAnchor('ground_maintenance_done', v)}
           />
           <AnchorCheckbox
             id="build"
             label="build"
             value={record.ground_build_done ?? null}
-            onChange={(v) => updateField('ground_build_done', v)}
+            timestamp={record.ground_build_done_at ?? null}
+            onChange={(v) => setAnchor('ground_build_done', v)}
           />
         </div>
       </SectionGroup>
