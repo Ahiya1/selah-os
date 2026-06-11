@@ -8,6 +8,7 @@ import { AnchorCheckbox } from '@/components/anchor-checkbox'
 import { SleepButton } from '@/components/sleep-button'
 import { NoteField } from '@/components/note-field'
 import { SectionGroup } from '@/components/section-group'
+import { getDayOfWeek } from '@/lib/dates'
 import type { User } from '@supabase/supabase-js'
 
 export default function TodayPage() {
@@ -31,11 +32,21 @@ function TodayContent({ userId }: { userId: string }) {
   const {
     record,
     error,
+    effectiveDate,
     updateField,
     setAnchor,
     setSleepStart,
     setSleepEnd,
   } = useDailyRecord(userId)
+
+  // Ground rhythm varies across the week:
+  //   Sun-Thu: maintenance + build
+  //   Fri:     maintenance only
+  //   Sat:     rest (a distinct practice, no maintenance or build)
+  const dayOfWeek = getDayOfWeek(effectiveDate)
+  const isFriday = dayOfWeek === 5
+  const isSaturday = dayOfWeek === 6
+
   return (
     <div className="max-w-lg mx-auto px-4 pt-5 pb-8 space-y-6">
       <DateHeader />
@@ -116,24 +127,40 @@ function TodayContent({ userId }: { userId: string }) {
         </div>
       </SectionGroup>
 
-      <SectionGroup label="ground">
-        <div className="flex justify-around">
-          <AnchorCheckbox
-            id="maintenance"
-            label="maintenance"
-            value={record.ground_maintenance_done ?? null}
-            timestamp={record.ground_maintenance_done_at ?? null}
-            onChange={(v) => setAnchor('ground_maintenance_done', v)}
-          />
-          <AnchorCheckbox
-            id="build"
-            label="build"
-            value={record.ground_build_done ?? null}
-            timestamp={record.ground_build_done_at ?? null}
-            onChange={(v) => setAnchor('ground_build_done', v)}
-          />
-        </div>
-      </SectionGroup>
+      {isSaturday ? (
+        <SectionGroup label="rest">
+          <div className="flex">
+            <AnchorCheckbox
+              id="rest"
+              label="rest"
+              value={record.rest_done ?? null}
+              timestamp={record.rest_done_at ?? null}
+              onChange={(v) => setAnchor('rest_done', v)}
+            />
+          </div>
+        </SectionGroup>
+      ) : (
+        <SectionGroup label="ground">
+          <div className="flex justify-around">
+            <AnchorCheckbox
+              id="maintenance"
+              label="maintenance"
+              value={record.ground_maintenance_done ?? null}
+              timestamp={record.ground_maintenance_done_at ?? null}
+              onChange={(v) => setAnchor('ground_maintenance_done', v)}
+            />
+            {!isFriday && (
+              <AnchorCheckbox
+                id="build"
+                label="build"
+                value={record.ground_build_done ?? null}
+                timestamp={record.ground_build_done_at ?? null}
+                onChange={(v) => setAnchor('ground_build_done', v)}
+              />
+            )}
+          </div>
+        </SectionGroup>
+      )}
 
       <SectionGroup label="note">
         <NoteField

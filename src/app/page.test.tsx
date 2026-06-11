@@ -28,10 +28,13 @@ vi.mock('@/hooks/use-daily-record', () => ({
       movement_done: null,
       ground_maintenance_done: null,
       ground_build_done: null,
+      rest_done: null,
       note: '',
     },
     error: null,
+    effectiveDate: '2026-03-12',
     updateField: vi.fn(),
+    setAnchor: vi.fn(),
     setSleepStart: vi.fn(),
     setSleepEnd: vi.fn(),
   }),
@@ -41,6 +44,10 @@ vi.mock('@/hooks/use-daily-record', () => ({
 vi.mock('@/lib/dates', () => ({
   getEffectiveDate: () => '2026-03-12',
   formatDisplayDate: () => 'Thursday, March 12',
+  getDayOfWeek: (s: string) => {
+    const [y, m, d] = s.split('-').map(Number)
+    return new Date(y, m - 1, d).getDay()
+  },
 }))
 
 import TodayPage from './page'

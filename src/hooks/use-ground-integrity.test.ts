@@ -38,6 +38,10 @@ vi.mock('@/lib/dates', () => ({
     const day = String(d.getDate()).padStart(2, '0')
     return `${y}-${m}-${day}`
   },
+  getDayOfWeek: (s: string) => {
+    const [y, m, d] = s.split('-').map(Number)
+    return new Date(y, m - 1, d).getDay()
+  },
 }))
 
 import { useGroundIntegrity, getLastSevenDates, recordToIntegrity } from './use-ground-integrity'
@@ -124,6 +128,45 @@ describe('recordToIntegrity', () => {
       note: '', created_at: '', updated_at: '',
     }
     expect(recordToIntegrity('2026-03-12', record).body).toBe(true)
+  })
+
+  // Ground rhythm varies by weekday: Fri = maintenance only, Sat = rest.
+  it('on Friday, ground is held by maintenance alone (build not expected)', () => {
+    const friday = {
+      id: '1', user_id: 'u1', date: '2026-03-13',
+      sleep_start: null, sleep_end: null,
+      breakfast: null, lunch: null, dinner: null,
+      cipralex_taken: null, hygiene_done: null, movement_done: null,
+      ground_maintenance_done: true, ground_build_done: null, rest_done: null,
+      note: '', created_at: '', updated_at: '',
+    }
+    // 2026-03-13 is a Friday
+    expect(recordToIntegrity('2026-03-13', friday).ground).toBe(true)
+  })
+
+  it('on Saturday, ground is held by rest (maintenance/build not expected)', () => {
+    const saturday = {
+      id: '1', user_id: 'u1', date: '2026-03-14',
+      sleep_start: null, sleep_end: null,
+      breakfast: null, lunch: null, dinner: null,
+      cipralex_taken: null, hygiene_done: null, movement_done: null,
+      ground_maintenance_done: null, ground_build_done: null, rest_done: true,
+      note: '', created_at: '', updated_at: '',
+    }
+    // 2026-03-14 is a Saturday
+    expect(recordToIntegrity('2026-03-14', saturday).ground).toBe(true)
+  })
+
+  it('on Saturday, ground is not held by maintenance or build without rest', () => {
+    const saturday = {
+      id: '1', user_id: 'u1', date: '2026-03-14',
+      sleep_start: null, sleep_end: null,
+      breakfast: null, lunch: null, dinner: null,
+      cipralex_taken: null, hygiene_done: null, movement_done: null,
+      ground_maintenance_done: true, ground_build_done: true, rest_done: null,
+      note: '', created_at: '', updated_at: '',
+    }
+    expect(recordToIntegrity('2026-03-14', saturday).ground).toBe(false)
   })
 })
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { getEffectiveDate, formatDateString } from '@/lib/dates'
+import { getEffectiveDate, formatDateString, getDayOfWeek } from '@/lib/dates'
 import type { Database } from '@/lib/types'
 
 type DailyRecord = Database['public']['Tables']['daily_records']['Row']
@@ -30,6 +30,18 @@ function getLastSevenDates(today?: Date): string[] {
   return dates
 }
 
+// Ground rhythm is not uniform across the week, so what counts as "held"
+// depends on the day:
+//   Sat: rest is the practice (no maintenance or build expected)
+//   Fri: maintenance only (build not expected)
+//   Sun-Thu: maintenance or build
+function groundHeld(date: string, record: DailyRecord): boolean {
+  const dow = getDayOfWeek(date)
+  if (dow === 6) return !!record.rest_done
+  if (dow === 5) return !!record.ground_maintenance_done
+  return !!(record.ground_maintenance_done || record.ground_build_done)
+}
+
 function recordToIntegrity(date: string, record: DailyRecord | undefined): DayIntegrity {
   if (!record) {
     return { date, sleep: false, food: false, medication: false, body: false, ground: false }
@@ -41,7 +53,7 @@ function recordToIntegrity(date: string, record: DailyRecord | undefined): DayIn
     food: !!(record.breakfast && record.lunch && record.dinner),
     medication: !!record.cipralex_taken,
     body: !!(record.hygiene_done && record.movement_done),
-    ground: !!(record.ground_maintenance_done || record.ground_build_done),
+    ground: groundHeld(date, record),
   }
 }
 

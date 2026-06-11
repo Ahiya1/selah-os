@@ -28,6 +28,16 @@ export function formatDateString(date: Date): string {
 }
 
 /**
+ * Returns the day of week for a YYYY-MM-DD date string in local time.
+ * 0 = Sunday ... 5 = Friday, 6 = Saturday.
+ * Parses as a local date (not UTC) so it agrees with the effective date.
+ */
+export function getDayOfWeek(dateString: string): number {
+  const [year, month, day] = dateString.split('-').map(Number)
+  return new Date(year, month - 1, day).getDay()
+}
+
+/**
  * Formats a YYYY-MM-DD date string for display.
  * Example: "2026-03-12" -> "Thursday, March 12"
  */

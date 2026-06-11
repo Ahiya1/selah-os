@@ -24,6 +24,7 @@ export interface Database {
           movement_done: boolean | null
           ground_maintenance_done: boolean | null
           ground_build_done: boolean | null
+          rest_done: boolean | null
           breakfast_at: string | null
           lunch_at: string | null
           dinner_at: string | null
@@ -32,6 +33,7 @@ export interface Database {
           movement_done_at: string | null
           ground_maintenance_done_at: string | null
           ground_build_done_at: string | null
+          rest_done_at: string | null
           note: string
           created_at: string
           updated_at: string
@@ -50,6 +52,7 @@ export interface Database {
           movement_done?: boolean | null
           ground_maintenance_done?: boolean | null
           ground_build_done?: boolean | null
+          rest_done?: boolean | null
           breakfast_at?: string | null
           lunch_at?: string | null
           dinner_at?: string | null
@@ -58,6 +61,7 @@ export interface Database {
           movement_done_at?: string | null
           ground_maintenance_done_at?: string | null
           ground_build_done_at?: string | null
+          rest_done_at?: string | null
           note?: string
           created_at?: string
           updated_at?: string
@@ -76,6 +80,7 @@ export interface Database {
           movement_done?: boolean | null
           ground_maintenance_done?: boolean | null
           ground_build_done?: boolean | null
+          rest_done?: boolean | null
           breakfast_at?: string | null
           lunch_at?: string | null
           dinner_at?: string | null
@@ -84,6 +89,7 @@ export interface Database {
           movement_done_at?: string | null
           ground_maintenance_done_at?: string | null
           ground_build_done_at?: string | null
+          rest_done_at?: string | null
           note?: string
           created_at?: string
           updated_at?: string

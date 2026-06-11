@@ -22,6 +22,7 @@ const EMPTY_RECORD: Omit<DailyRecord, 'id' | 'user_id' | 'created_at' | 'updated
   movement_done: null,
   ground_maintenance_done: null,
   ground_build_done: null,
+  rest_done: null,
   breakfast_at: null,
   lunch_at: null,
   dinner_at: null,
@@ -30,6 +31,7 @@ const EMPTY_RECORD: Omit<DailyRecord, 'id' | 'user_id' | 'created_at' | 'updated
   movement_done_at: null,
   ground_maintenance_done_at: null,
   ground_build_done_at: null,
+  rest_done_at: null,
   note: '',
 }
 
@@ -44,6 +46,7 @@ type AnchorField =
   | 'movement_done'
   | 'ground_maintenance_done'
   | 'ground_build_done'
+  | 'rest_done'
 
 const ANCHOR_TIME_FIELD: Record<AnchorField, keyof DailyRecord> = {
   breakfast: 'breakfast_at',
@@ -54,6 +57,7 @@ const ANCHOR_TIME_FIELD: Record<AnchorField, keyof DailyRecord> = {
   movement_done: 'movement_done_at',
   ground_maintenance_done: 'ground_maintenance_done_at',
   ground_build_done: 'ground_build_done_at',
+  rest_done: 'rest_done_at',
 }
 
 export function useDailyRecord(userId: string) {
