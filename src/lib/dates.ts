@@ -88,6 +88,15 @@ const MONTH_ABBREVS = [
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ]
 
+/**
+ * Formats a YYYY-MM-DD date string briefly, for marking the ends of a span.
+ * Example: "2026-03-12" -> "Mar 12"
+ */
+export function formatShortDate(dateString: string): string {
+  const [, month, day] = dateString.split('-').map(Number)
+  return `${MONTH_ABBREVS[month - 1]} ${day}`
+}
+
 export function formatWeekRange(weekStart: string): string {
   const [year, month, day] = weekStart.split('-').map(Number)
   const monday = new Date(year, month - 1, day)
