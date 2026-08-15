@@ -25,8 +25,26 @@
 }
 
 @layer base {
+  /* Painted before anything renders, so arrival never lands on white. */
+  html {
+    background-color: var(--color-warm-100);
+  }
+
+  /* The screen has a down. Light at the top, denser toward the floor, so
+     everything on it reads as resting on something rather than suspended in
+     it. Fixed to the viewport: the ground belongs to the screen, not to the
+     document, and stays put when content scrolls over it. */
   body {
-    @apply bg-warm-100 text-warm-700 font-sans antialiased;
+    @apply text-warm-700 font-sans antialiased;
+    min-height: 100dvh;
+    background-color: var(--color-warm-100);
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-warm-50) 0%,
+      var(--color-warm-100) 45%,
+      var(--color-warm-200) 100%
+    );
+    background-attachment: fixed;
     font-size: 17px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -40,9 +58,53 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Arrival — the screen settles onto the ground rather than appearing on it.
+   A short downward travel with a heavy ease-out: something with mass coming
+   to rest. Plays once, on open. Afterwards, nothing moves on its own.
+   --------------------------------------------------------------------------- */
+
+@keyframes ground-arrive {
+  0%   { opacity: 0; transform: translateY(-7px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.ground-arrive {
+  animation: ground-arrive 520ms cubic-bezier(0.16, 0.62, 0.23, 1) both;
+}
+
+/* ---------------------------------------------------------------------------
    Anchor completion — a beat, and a ring grown within.
    Not performative: small, quiet, alive. Like a tree a little more mature.
    --------------------------------------------------------------------------- */
+
+/* Weight is felt through resistance. The circle gives under the finger
+   quickly and rises back slowly — the asymmetry is what reads as mass.
+   (Duration lists map in order to the transitioned properties.) */
+.anchor-circle {
+  transition:
+    background-color 700ms ease-out,
+    border-color 700ms ease-out,
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.anchor-circle:active {
+  transform: scale(0.94);
+  transition-duration: 700ms, 700ms, 90ms;
+}
+
+/* The same give, for a larger surface — a broad face travels less than a dot
+   to read as the same weight under the finger. */
+.press-give {
+  transition:
+    background-color 700ms ease-out,
+    color 700ms ease-out,
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.press-give:active {
+  transform: scale(0.985);
+  transition-duration: 700ms, 700ms, 90ms;
+}
 
 /* A single soft beat — the circle swells slightly and settles. */
 @keyframes anchor-beat {
@@ -80,6 +142,15 @@
 
 /* Honor stillness: those who ask for less motion still get the quiet reveal. */
 @media (prefers-reduced-motion: reduce) {
+  .ground-arrive {
+    animation: none;
+  }
+
+  .anchor-circle:active,
+  .press-give:active {
+    transform: none;
+  }
+
   .anchor-beat {
     animation: none;
   }

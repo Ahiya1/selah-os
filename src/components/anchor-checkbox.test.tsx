@@ -22,6 +22,13 @@ describe('AnchorCheckbox', () => {
     expect(container.querySelector('svg')).not.toBeInTheDocument()
   })
 
+  it('gives under the finger', () => {
+    render(
+      <AnchorCheckbox id="test" label="breakfast" value={null} onChange={() => {}} />
+    )
+    expect(screen.getByRole('checkbox')).toHaveClass('anchor-circle')
+  })
+
   it('shows done state when value is true', () => {
     const { container } = render(
       <AnchorCheckbox id="test" label="breakfast" value={true} onChange={() => {}} />
@@ -35,20 +42,18 @@ describe('AnchorCheckbox', () => {
     expect(svg).toHaveClass('text-warm-50')
   })
 
-  it('shows not-done state when value is false', () => {
+  it('renders a legacy false value as blank, with no mark of its own', () => {
     const { container } = render(
       <AnchorCheckbox id="test" label="breakfast" value={false} onChange={() => {}} />
     )
     const button = screen.getByRole('checkbox')
-    expect(button).toHaveClass('bg-warm-300')
     expect(button).toHaveClass('border-warm-400')
-    // Dash SVG present
-    const svg = container.querySelector('svg')
-    expect(svg).toBeInTheDocument()
-    expect(svg).toHaveClass('text-warm-600')
+    expect(button).not.toHaveClass('bg-warm-300')
+    expect(button).not.toHaveClass('bg-green-600')
+    expect(container.querySelector('svg')).not.toBeInTheDocument()
   })
 
-  it('cycles null -> true on click', () => {
+  it('marks done on click when untouched', () => {
     const onChange = vi.fn()
     render(
       <AnchorCheckbox id="test" label="breakfast" value={null} onChange={onChange} />
@@ -57,22 +62,22 @@ describe('AnchorCheckbox', () => {
     expect(onChange).toHaveBeenCalledWith(true)
   })
 
-  it('cycles true -> false on click', () => {
+  it('returns to blank on click when done — never to a not-done mark', () => {
     const onChange = vi.fn()
     render(
       <AnchorCheckbox id="test" label="breakfast" value={true} onChange={onChange} />
     )
     fireEvent.click(screen.getByRole('checkbox'))
-    expect(onChange).toHaveBeenCalledWith(false)
+    expect(onChange).toHaveBeenCalledWith(null)
   })
 
-  it('cycles false -> null on click', () => {
+  it('marks a legacy false value done on click, retiring the old state', () => {
     const onChange = vi.fn()
     render(
       <AnchorCheckbox id="test" label="breakfast" value={false} onChange={onChange} />
     )
     fireEvent.click(screen.getByRole('checkbox'))
-    expect(onChange).toHaveBeenCalledWith(null)
+    expect(onChange).toHaveBeenCalledWith(true)
   })
 
   it('has minimum tap target size', () => {
@@ -89,7 +94,7 @@ describe('AnchorCheckbox', () => {
       <AnchorCheckbox id="test" label="breakfast" value={null} onChange={() => {}} />
     )
     const button = screen.getByRole('checkbox')
-    expect(button).toHaveAttribute('aria-checked', 'mixed')
+    expect(button).toHaveAttribute('aria-checked', 'false')
     expect(button).toHaveAttribute('aria-label', 'breakfast: untouched')
   })
 
@@ -102,13 +107,13 @@ describe('AnchorCheckbox', () => {
     expect(button).toHaveAttribute('aria-label', 'breakfast: done')
   })
 
-  it('has proper ARIA attributes for false state', () => {
+  it('announces a legacy false value as untouched', () => {
     render(
       <AnchorCheckbox id="test" label="breakfast" value={false} onChange={() => {}} />
     )
     const button = screen.getByRole('checkbox')
     expect(button).toHaveAttribute('aria-checked', 'false')
-    expect(button).toHaveAttribute('aria-label', 'breakfast: not done')
+    expect(button).toHaveAttribute('aria-label', 'breakfast: untouched')
   })
 
   it('updates ARIA when value changes', () => {
@@ -119,15 +124,9 @@ describe('AnchorCheckbox', () => {
     expect(screen.getByRole('checkbox')).toHaveAttribute('aria-label', 'breakfast: done')
 
     rerender(
-      <AnchorCheckbox id="test" label="breakfast" value={false} onChange={() => {}} />
-    )
-    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-checked', 'false')
-    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-label', 'breakfast: not done')
-
-    rerender(
       <AnchorCheckbox id="test" label="breakfast" value={null} onChange={() => {}} />
     )
-    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-checked', 'mixed')
+    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-checked', 'false')
     expect(screen.getByRole('checkbox')).toHaveAttribute('aria-label', 'breakfast: untouched')
   })
 
@@ -195,15 +194,30 @@ describe('AnchorCheckbox', () => {
     expect(container.querySelector('.anchor-time')).not.toBeInTheDocument()
   })
 
-  it('does not use red or error colors for not-done state', () => {
+  it('never uses red or error colors in any state', () => {
+    for (const value of [null, false, true] as const) {
+      const { container, unmount } = render(
+        <AnchorCheckbox id="test" label="breakfast" value={value} onChange={() => {}} />
+      )
+      const button = screen.getByRole('checkbox')
+      expect(button.className).not.toContain('red')
+      expect(button.className).not.toContain('error')
+
+      const svg = container.querySelector('svg')
+      if (svg) {
+        const cls = svg.className.baseVal || svg.getAttribute('class') || ''
+        expect(cls).not.toContain('red')
+        expect(cls).not.toContain('error')
+      }
+      unmount()
+    }
+  })
+
+  it('leaves no visible mark for an unmet anchor', () => {
     const { container } = render(
-      <AnchorCheckbox id="test" label="breakfast" value={false} onChange={() => {}} />
+      <AnchorCheckbox id="test" label="breakfast" value={null} onChange={() => {}} />
     )
-    const button = screen.getByRole('checkbox')
-    expect(button.className).not.toContain('red')
-    expect(button.className).not.toContain('error')
-    const svg = container.querySelector('svg')
-    expect(svg!.className.baseVal || svg!.getAttribute('class')).not.toContain('red')
-    expect(svg!.className.baseVal || svg!.getAttribute('class')).not.toContain('error')
+    // Blank is blank: an empty ring, nothing drawn inside it.
+    expect(container.querySelector('svg')).not.toBeInTheDocument()
   })
 })

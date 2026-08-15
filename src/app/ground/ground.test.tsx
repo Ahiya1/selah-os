@@ -59,9 +59,12 @@ describe('GroundPage', () => {
     expect(screen.getByText('ground')).toBeInTheDocument()
   })
 
-  it('renders empty div while loading user', () => {
+  it('holds the full-height ground field while loading user', () => {
     mockGetUser.mockReturnValueOnce(new Promise(() => {})) // Never resolves
     const { container } = render(<GroundPage />)
-    expect(container.querySelector('.p-4')).toBeInTheDocument()
+    // Nothing is shown, but the ground is already there to arrive onto.
+    const field = container.querySelector('.min-h-dvh')
+    expect(field).toBeInTheDocument()
+    expect(field).toBeEmptyDOMElement()
   })
 })

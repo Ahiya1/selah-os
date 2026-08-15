@@ -17,7 +17,7 @@ export default function GroundPage() {
   }, [supabase.auth])
 
   if (!user) {
-    return <div className="p-4" />
+    return <div className="min-h-dvh" />
   }
 
   return <GroundContent userId={user.id} />
@@ -27,7 +27,7 @@ function GroundContent({ userId }: { userId: string }) {
   const { days, error } = useGroundIntegrity(userId)
 
   return (
-    <div className="max-w-lg mx-auto px-4 pt-5 pb-8">
+    <div className="ground-arrive max-w-lg mx-auto px-4 pt-5 pb-8">
       <h1 className="text-sm text-warm-600 uppercase tracking-wide mb-6">7 days</h1>
 
       {error && (

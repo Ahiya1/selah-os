@@ -79,4 +79,13 @@ describe('TodayPage', () => {
     })
   })
 
+  it('settles onto the ground rather than appearing on it', async () => {
+    const { container } = render(<TodayPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText('sleep')).toBeInTheDocument()
+    })
+
+    expect(container.querySelector('.ground-arrive')).toBeInTheDocument()
+  })
 })

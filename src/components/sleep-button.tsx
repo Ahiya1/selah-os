@@ -17,8 +17,7 @@ export function SleepButton({ label, timestamp, onToggle }: SleepButtonProps) {
       type="button"
       onClick={onToggle}
       className={`
-        w-full min-h-[56px] rounded-lg text-base px-4 py-3
-        transition-colors
+        press-give w-full min-h-[56px] rounded-lg text-base px-4 py-3
         ${
           isRecorded
             ? 'bg-warm-200 text-warm-500'

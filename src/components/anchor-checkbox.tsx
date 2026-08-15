@@ -3,6 +3,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { formatTime } from '@/lib/dates'
 
+// An anchor is either met or it isn't yet. Both are fine, so only the meeting
+// is marked; the unmet state is simply blank. Legacy `false` rows predate this
+// and read as blank, and are overwritten the next time the anchor is touched.
 type AnchorState = boolean | null
 
 interface AnchorCheckboxProps {
@@ -15,23 +18,18 @@ interface AnchorCheckboxProps {
 }
 
 function nextAnchorState(current: AnchorState): AnchorState {
-  if (current === null) return true
-  if (current === true) return false
-  return null
+  return current === true ? null : true
 }
 
 function stateLabel(value: AnchorState): string {
-  if (value === null) return 'untouched'
-  if (value === true) return 'done'
-  return 'not done'
+  return value === true ? 'done' : 'untouched'
 }
 
 const CIRCLE_BASE =
-  'w-7 h-7 rounded-full border-2 flex items-center justify-center cursor-pointer transition-[background-color,border-color] duration-700 ease-out'
+  'anchor-circle w-7 h-7 rounded-full border-2 flex items-center justify-center cursor-pointer'
 
 function circleClass(value: AnchorState): string {
   if (value === true) return `${CIRCLE_BASE} border-green-600 bg-green-600`
-  if (value === false) return `${CIRCLE_BASE} border-warm-400 bg-warm-300`
   return `${CIRCLE_BASE} border-warm-400`
 }
 
@@ -90,12 +88,12 @@ export function AnchorCheckbox({ label, value, onChange, timestamp, id }: Anchor
           type="button"
           id={id}
           role="checkbox"
-          aria-checked={value === null ? 'mixed' : value}
+          aria-checked={isDone}
           aria-label={`${label}: ${stateLabel(value)}`}
           onClick={handleClick}
           className={`${circleClass(value)} ${pulse > 0 ? 'anchor-beat' : ''}`}
         >
-          {value === true && (
+          {isDone && (
             <svg
               className="w-4 h-4 text-warm-50"
               fill="none"
@@ -104,17 +102,6 @@ export function AnchorCheckbox({ label, value, onChange, timestamp, id }: Anchor
               strokeWidth={3}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          )}
-          {value === false && (
-            <svg
-              className="w-4 h-4 text-warm-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={3}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h12" />
             </svg>
           )}
         </button>

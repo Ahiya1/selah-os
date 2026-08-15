@@ -21,8 +21,11 @@ export default function TodayPage() {
     })
   }, [supabase.auth])
 
+  // The ground field is already painted by the body. Nothing is shown here,
+  // so the screen is somewhere before you arrive rather than an empty white
+  // room that gets furnished while you watch.
   if (!user) {
-    return <div className="p-4" />
+    return <div className="min-h-dvh" />
   }
 
   return <TodayContent userId={user.id} />
@@ -48,7 +51,7 @@ function TodayContent({ userId }: { userId: string }) {
   const isSaturday = dayOfWeek === 6
 
   return (
-    <div className="max-w-lg mx-auto px-4 pt-5 pb-8 space-y-6">
+    <div className="ground-arrive max-w-lg mx-auto px-4 pt-5 pb-8 space-y-6">
       <DateHeader />
 
       {error && (
