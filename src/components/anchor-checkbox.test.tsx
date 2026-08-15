@@ -1,9 +1,32 @@
 import React from 'react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { AnchorCheckbox } from './anchor-checkbox'
+import { groundTouch } from '@/lib/haptics'
+
+vi.mock('@/lib/haptics', () => ({ groundTouch: vi.fn() }))
 
 describe('AnchorCheckbox', () => {
+  beforeEach(() => {
+    vi.mocked(groundTouch).mockClear()
+  })
+
+  it('ticks in the hand when the anchor is met', () => {
+    render(
+      <AnchorCheckbox id="test" label="breakfast" value={null} onChange={() => {}} />
+    )
+    fireEvent.click(screen.getByRole('checkbox'))
+    expect(groundTouch).toHaveBeenCalledTimes(1)
+  })
+
+  it('stays silent when leaving the done state', () => {
+    render(
+      <AnchorCheckbox id="test" label="breakfast" value={true} onChange={() => {}} />
+    )
+    fireEvent.click(screen.getByRole('checkbox'))
+    expect(groundTouch).not.toHaveBeenCalled()
+  })
+
   it('renders with label', () => {
     render(
       <AnchorCheckbox id="test" label="breakfast" value={null} onChange={() => {}} />

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { formatTime } from '@/lib/dates'
+import { groundTouch } from '@/lib/haptics'
 
 // An anchor is either met or it isn't yet. Both are fine, so only the meeting
 // is marked; the unmet state is simply blank. Legacy `false` rows predate this
@@ -58,7 +59,8 @@ export function AnchorCheckbox({ label, value, onChange, timestamp, id }: Anchor
     onChange(next)
 
     if (next === true) {
-      // A beat, and a new ring within.
+      // A beat, a new ring within, and the same beat in the hand.
+      groundTouch()
       setPulse((n) => n + 1)
       setReveal(true)
       if (beatTimer.current) clearTimeout(beatTimer.current)

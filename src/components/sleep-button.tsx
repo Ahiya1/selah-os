@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { formatTime } from '@/lib/dates'
+import { groundTouch } from '@/lib/haptics'
 
 interface SleepButtonProps {
   label: string
@@ -12,10 +13,17 @@ interface SleepButtonProps {
 export function SleepButton({ label, timestamp, onToggle }: SleepButtonProps) {
   const isRecorded = timestamp !== null
 
+  // Sleep is the anchor met in the dark, half-asleep, often without looking.
+  // The tick confirms it landed when the screen can't.
+  function handleClick() {
+    if (!isRecorded) groundTouch()
+    onToggle()
+  }
+
   return (
     <button
       type="button"
-      onClick={onToggle}
+      onClick={handleClick}
       className={`
         press-give w-full min-h-[56px] rounded-lg text-base px-4 py-3
         ${

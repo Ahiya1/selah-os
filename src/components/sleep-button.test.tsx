@@ -1,7 +1,10 @@
 import React from 'react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { SleepButton } from './sleep-button'
+import { groundTouch } from '@/lib/haptics'
+
+vi.mock('@/lib/haptics', () => ({ groundTouch: vi.fn() }))
 
 // Mock the dates module to avoid locale-dependent issues in tests
 vi.mock('@/lib/dates', () => ({
@@ -14,6 +17,30 @@ vi.mock('@/lib/dates', () => ({
 }))
 
 describe('SleepButton', () => {
+  beforeEach(() => {
+    vi.mocked(groundTouch).mockClear()
+  })
+
+  it('ticks in the hand when sleep is recorded, for the eyes that are closed', () => {
+    render(
+      <SleepButton label="going to sleep" timestamp={null} onToggle={() => {}} />
+    )
+    fireEvent.click(screen.getByRole('button'))
+    expect(groundTouch).toHaveBeenCalledTimes(1)
+  })
+
+  it('stays silent when clearing a recorded time', () => {
+    render(
+      <SleepButton
+        label="going to sleep"
+        timestamp="2026-03-12T23:14:00.000Z"
+        onToggle={() => {}}
+      />
+    )
+    fireEvent.click(screen.getByRole('button'))
+    expect(groundTouch).not.toHaveBeenCalled()
+  })
+
   it('renders label when no timestamp', () => {
     render(
       <SleepButton label="going to sleep" timestamp={null} onToggle={() => {}} />
